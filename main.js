@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-const client = new Discord.Client();
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 
 const { prefix, token } = require('./config.json');
 
@@ -19,7 +19,7 @@ for(const file of commandFiles){
 client.once('ready', () => {
     console.log('vEuroExpress is ready to perform his duties!');
 
-    client.user.setActivity('Alpha 0.1.0. | !help', { type: 'PLAYING' });
+    client.user.setActivity('Alpha 0.1.0 | !help', { type: 'PLAYING' });
 });
 
 client.on('message', message => {
@@ -81,6 +81,8 @@ client.on('message', message => {
         }
     } else if(command === 'cancel'){
         client.commands.get('cancel').execute(message, args);
+    } else if(command === 'reaction-role-msg-create'){
+        client.commands.get('rrmsgc').execute(message, args);
     }
     });
 
