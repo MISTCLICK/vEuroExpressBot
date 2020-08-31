@@ -52,7 +52,7 @@ module.exports = {
                                                             .setImage(ImageURL)
                                                             .setFooter(Footer)
 
-                                                            message.channel.send(NewAnnouncementEmbed).catch(console.log.errors).then(() => {
+                                                            message.channel.send('Notifying @ everyone', NewAnnouncementEmbed).catch(console.log.errors).then(() => {
                                                                 message.channel.send('This was the preview of your announcement. To publish it type "!confirm", to cancel type "!cancel", to start over type "!announce".').then(() => {
                                                                     client.AnnouncementEmbedInfo = {
                                                                         "title": title,
