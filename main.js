@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 
+const axios = require('axios');
+
 const client = new Discord.Client();
 
 const { prefix, token } = require('./config.json');
@@ -20,12 +22,12 @@ for (const file of commandFiles) {
 client.once('ready', () => {
     console.log('vEuroExpress is ready to perform his duties!');
 
-    client.user.setActivity('Alpha 0.1.0 | !help', { type: 'PLAYING' });
+    client.user.setActivity('Alpha 0.1.1 | !help', { type: 'PLAYING' });
 
     roleClaim(client);
 });
 
-client.on('message', function(message) {
+client.on('message', async function(message) {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -84,6 +86,10 @@ client.on('message', function(message) {
         }
     } else if (command === 'cancel') {
         client.commands.get('cancel').execute(message, args);
+    } else if (command === 'metar') {
+        client.commands.get('metar').execute(message, args);
+    } else if (command === 'taf') {
+        client.commands.get('taf').execute(message, args);
     }
 });
 
