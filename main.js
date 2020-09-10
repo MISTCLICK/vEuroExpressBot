@@ -28,6 +28,14 @@ client.once('ready', () => {
 });
 
 client.on('message', async function(message) {
+    if (message.content.startsWith('<@') && message.content.endsWith('>')) {
+        const UserMention = message.mentions.users.first();
+        if (UserMention.id === '748608375318905013') {
+        const MenjaZvali = new Discord.MessageAttachment('./images/yes.jpg');
+        message.channel.send(MenjaZvali);
+        }
+    }
+
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
