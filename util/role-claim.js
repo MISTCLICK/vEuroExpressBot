@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
-
-const firstMessage = require('/vEuroExpressBot/first-message.js');
+const path = require('path')
+const firstMessage = require(path.join(__dirname, 'rrmessage.js'));
 
 module.exports = client => {
-    const channelID = '750289671380140033'
+    const channelID = '764147283897745458';
 
     const getEmoji = emojiName => client.emojis.cache.find(emoji => emoji.name === emojiName);
 
@@ -33,9 +33,9 @@ module.exports = client => {
     
     const EmojiEmbed = new Discord.MessageEmbed()
     .setColor('#00309d')
-    .setAuthor('vEX reaction roles: Menu', 'https://cdn.discordapp.com/attachments/682219767230365742/745291964244688976/ava.png', 'http://veuroexpress.org')
+    .setAuthor('Reaction roles: Menu', 'https://cdn.discordapp.com/attachments/760151712845004840/760153034113417246/ava.png')
     .setDescription('```\nReact to this message to get roles correspondant to the emoji\n```\n' + emojiText)
-    .setFooter('Found a bug? Report it in #support!')
+    .setFooter('Found a bug? Report it in #support!', 'https://cdn.discordapp.com/attachments/760151712845004840/760153034113417246/ava.png')
 
     firstMessage(client, channelID, EmojiEmbed, reactions);
 
