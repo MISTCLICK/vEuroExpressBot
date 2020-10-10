@@ -14,13 +14,20 @@ module.exports = class MetarCommand extends Commando.Command {
                     prompt: "What airport's metar would you like to get?",
                     type: 'string'
                 }
-            ]
-        })
+            ],
+            argsCount: 1,
+            argsPromptLimit: 1
+        });
     }
 
     async run(message, airport) {
+        let airportStringCheck = airport.airport;
+        if (airportStringCheck.length > 4) {
+            console.log("More than 1 airport's metar has been requested");
+            return;
+        } else {
             let getMetar = async () => {
-                let airportString = airport.airport;
+                let airportString = airport.airport
                 let airportCode = airportString.toUpperCase();
                 let metarURL = 'https://metartaf.ru/'+airportCode+'.json'
                 let response = await axios.get(metarURL);
@@ -31,5 +38,6 @@ module.exports = class MetarCommand extends Commando.Command {
         console.log(`Metar of ${airport.airport} has been requested!`)
         console.log(metarValue);
         message.reply("```" + `\n${metarValue.metar.slice(19)}` + "\n```");
+        }
     }
 }
