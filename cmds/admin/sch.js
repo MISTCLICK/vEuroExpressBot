@@ -31,7 +31,7 @@ module.exports = class ReactionMessageCreateCommand extends Commando.Command {
         .setDescription('Press the reaction below to open a new ticket!')
         );
 
-        schEmbed.react('764150827526782977');
+        schEmbed.react('764150569363046410');
 
         this.client.supportChannel = {
             "channelID": channelID

@@ -8,16 +8,7 @@ module.exports = client => {
     const getEmoji = emojiName => client.emojis.cache.find(emoji => emoji.name === emojiName);
 
     const emojis = {
-        blue: 'Blue',
-        red: 'Red',
-        black: 'Black',
-        white: 'White',
-        pink: 'Pink',
-        purple: 'Purple',
-        yellow: 'Yellow',
-        green: 'Green',
-        orange: 'Orange',
-        Lightblue: 'Light Blue'
+        radar: 'ATC Kontrolar!'
     }
 
     const reactions = []

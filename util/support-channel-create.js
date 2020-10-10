@@ -19,7 +19,7 @@ module.exports = client => {
 
         if(user.bot) return;
 
-        if(reaction.emoji.name == 'pingTicket') {
+        if(reaction.emoji.name == 'RandomEmoji') {
             reaction.users.remove(user);
 
             reaction.message.guild.channels.create(`ticket-${user.tag}-${Math.floor(Math.random() * 1100) +100}`, {
