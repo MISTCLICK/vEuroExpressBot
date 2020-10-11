@@ -12,20 +12,15 @@ module.exports = class TafCommand extends Commando.Command {
                 {
                     key: 'airport',
                     prompt: "What airport's metar would you like to get?",
-                    type: 'string'
+                    type: 'string',
+                    validate: text => text.length === 4
                 }
             ],
             argsCount: 1,
-            argsPromptLimit: 1
         });
     }
 
     async run(message, airport) {
-        let airportStringCheck = airport.airport;
-        if (airportStringCheck.length > 4) {
-            console.log("More than 1 airport's taf has been requested");
-            return;
-        } else {
             let getTAF = async () => {
             let airportString = airport.airport;
             let airportCode = airportString.toUpperCase()
@@ -37,6 +32,5 @@ module.exports = class TafCommand extends Commando.Command {
         console.log(`TAF of ${airport.airport} has been requested!`)
         console.log(tafValue);
         message.reply("```" + `\n${tafValue.taf.slice(19)}` + "\n```");
-        }
     }
 }
