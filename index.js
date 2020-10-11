@@ -8,7 +8,7 @@ const Commando = require('discord.js-commando');
 const path = require('path');
 
 const client = new Commando.CommandoClient({
-    owner: ['349553169035952140'],
+    owner: ['349553169035952140', '331528449644560405'],
     commandPrefix: config.prefix,
     invite: 'https://discord.gg/BxmjpP5'
 })
@@ -33,7 +33,6 @@ client.registry
     .registerDefaultGroups()
 	.registerDefaultCommands({
         unknownCommand: false,
-        eval: false,
     })
     .registerCommandsIn(path.join(__dirname, 'cmds'))
 
