@@ -17,6 +17,8 @@ module.exports = class TafCommand extends Commando.Command {
                 }
             ],
             argsCount: 1,
+            examples: ['!taf EVRA', '!t ULLI'],
+            aliases: ['t']
         });
     }
 
@@ -28,9 +30,12 @@ module.exports = class TafCommand extends Commando.Command {
             let taf = response.data
             return taf
         }
-        let tafValue = await getTAF();
+        let tafValue = await getTAF()
+        .catch(console.error);
+        if (tafValue) {
         console.log(`TAF of ${airport.airport} has been requested!`)
         console.log(tafValue);
         message.reply("```" + `\n${tafValue.taf.slice(19)}` + "\n```");
+        } else return message.channel.send('No airport with such ICAO code was found in our Data Base, please provide a valid ICAO code next time!');
     }
 }

@@ -16,7 +16,9 @@ module.exports = class MetarCommand extends Commando.Command {
                     validate: text => text.length === 4
                 }
             ],
-            argsCount: 1
+            argsCount: 1,
+            examples: ['!metar EVRA', '!m ULLI'],
+            aliases: ['m']
         });
     }
 
@@ -28,10 +30,13 @@ module.exports = class MetarCommand extends Commando.Command {
                 let response = await axios.get(metarURL);
                 let metar = response.data;
                 return metar;
-        }
-        let metarValue = await getMetar();
-        console.log(`Metar of ${airport.airport} has been requested!`)
-        console.log(metarValue);
-        message.reply("```" + `\n${metarValue.metar.slice(19)}` + "\n```");
+            }
+        let metarValue = await getMetar()
+        .catch(console.error);
+        if (metarValue) {
+            console.log(`Metar of ${airport.airport} has been requested!`);
+            console.log(metarValue);
+            message.reply("```" + `\n${metarValue.metar.slice(19)}` + "\n```");
+        } else return message.channel.send('No airport with such ICAO code was found in our Data Base, please provide a valid ICAO code next time!');
     }
 }
