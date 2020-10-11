@@ -23,3 +23,5 @@ When you're done, create a discord application in the developer portal and invit
 To run the bot, simply type `node index.js` in the terminal/console pointed at the bot folder with `cd` command.
 
 Now, you're done! Don't forget to follow the license properly and enjoy using the bot.
+
+- Artur Vasiljev EXP008
