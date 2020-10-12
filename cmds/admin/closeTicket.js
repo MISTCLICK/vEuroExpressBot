@@ -18,6 +18,6 @@ module.exports = class closeTicket extends Commando.Command {
         message.channel.delete()
 
         const logChannel = this.client.channels.cache.get('764524163310157834');
-        logChannel.send(`${message.author.tag} has closed a ticket.\n ${message.channel.name}`)
+        logChannel.send(`${message.author} has closed a ticket.\n${message.channel.name}`)
     }
 }
