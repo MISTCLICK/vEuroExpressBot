@@ -11,7 +11,7 @@ module.exports = class MetarCommand extends Commando.Command {
             args: [
                 {
                     key: 'airport',
-                    prompt: "What airport's metar would you like to get?",
+                    prompt: "What airport's metar would you like to get? Please provide the code only, don't type out the command again!",
                     type: 'string',
                     validate: text => text.length === 4
                 }
