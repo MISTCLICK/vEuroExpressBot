@@ -2,7 +2,9 @@ const config = require('./config.json');
 const roleClaim = require('./util/role-claim.js');
 const SUPmessageChannel = require('./util/support-channel-create.js');
 const MemberStatus = require('./util/memberJL.js');
-const membercountStat = require('./util/statChannels.js')
+const membercountStat = require('./util/statChannels.js');
+const automod = require('./util/automod.js');
+const mongo = require('./mongo/mongo.js');
 const Discord = require('discord.js');
 const Commando = require('discord.js-commando');
 const path = require('path');
@@ -15,13 +17,21 @@ const client = new Commando.CommandoClient({
 
 client.on('ready', async () => {
     console.log(`${client.user.username} is ready to perform his duties!`);
-    client.user.setActivity(`v1.0 | ${config.prefix}help`, type = 'PLAYING');
+    client.user.setActivity(`v1.1 | ${config.prefix}help`, type = 'PLAYING');
 
     roleClaim(client);
     SUPmessageChannel(client);
     MemberStatus(client);
     membercountStat(client);
-})
+    automod(client);
+    await mongo().then(mongoose => {
+        try {
+            console.log("Connected to MongoDB");
+        } finally {
+            mongoose.connection.close();
+        }
+    });
+});
 
 client.registry
     .registerDefaultTypes()
