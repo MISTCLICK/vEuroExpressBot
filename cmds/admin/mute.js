@@ -27,6 +27,8 @@ module.exports = class MuteCommand extends Commando.Command {
         args.shift();
         const reason = args.join(' ');
 
+        if (!durationRaw || !reason) return message.reply('Invalid syntax!'); 
+
         const duration = new Date();
         if (durationRaw.endsWith('d')) {
             const durationAI = durationRaw.slice(0, -1);
@@ -65,7 +67,7 @@ module.exports = class MuteCommand extends Commando.Command {
                     });
             
                     if (!mutedRole) {
-                        message.reply('No `Muted` role found in this server.');
+                        return message.reply('No `Muted` role found in this server.');
                     }
             
                     const targetMember = message.guild.members.cache.get(target.id);

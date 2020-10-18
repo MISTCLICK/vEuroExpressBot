@@ -24,7 +24,7 @@ module.exports = class WarnCommand extends Commando.Command {
         const guildID = message.guild.id;
         const userID = target.id;
         const reason = args.join(' ');
-        if (reason === '' || ' ' ) return message.reply("You didn't specify a reason for the warning!");
+        if (reason === '') return message.reply("You didn't specify a reason for the warning!");
 
         const warning = {
             author: message.member.user,
