@@ -5,9 +5,10 @@ If you would like to run this bot on your server please read the LICENSE careful
 First of all, Node.js, Discord.js, Discord.js/commando, git and Axios are required to operate.
 This means that your system needs 2 things: a code editor and Node.js of the either LTS or NEWEST version (only v12+).
 You can find Node.js here: https://nodejs.org/en/
+UPD: v1.1 - you now also require a MongoDB server.
 
 After you have extracted files to any location and installed Node.js open any form of a console/terminal and point it to the folder with the bot with the `cd` command.
-Then type `npm i` to install all the packages that the bot needs (discord.js, discord.js/Commando, git and axios).
+Then type `npm i` to install all the packages that the bot needs (discord.js, discord.js/Commando, git, mongoose and axios).
 
 Then it is your job to edit the code for it to suit your server (mostly texts and images). There are too many files to be edited, so we can't quite tell you which exact ones you need. Editing of the files - that is what you need the text editor for.
 
@@ -16,7 +17,8 @@ When you're done, create a discord application in the developer portal and invit
 ```json
 {
     "prefix": "YOUR PREFIX HERE",
-    "token": "YOUR BOT TOKEN HERE"
+    "token": "YOUR BOT TOKEN HERE",
+    "mongoPath": "YOUR MONGO PATH HERE"
 }
 ```
 
@@ -24,4 +26,4 @@ To run the bot, simply type `node index.js` in the terminal/console pointed at t
 
 Now, you're done! Don't forget to follow the license properly and enjoy using the bot.
 
-- Artur Vasiljev EXP008
+-- Artur Vasiljev EXP008
