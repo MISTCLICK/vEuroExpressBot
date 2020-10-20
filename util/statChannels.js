@@ -1,3 +1,5 @@
+const mysqlConnection = require('../mysql/sqlconnect.js');
+
 module.exports = (client) => {
     const guild = client.guilds.cache.get('731107533024133121')
 
@@ -12,15 +14,19 @@ module.exports = (client) => {
   
     updateMembers(guild)
 
-    const updatePilots = (guild) => {
-      const channelId = '764546853264949248';
-      const channel = guild.channels.cache.get(channelId)
-      const roleID = '731121390673199184';
-      const PilotServerCount = guild.roles.cache.get(roleID).members.size
-      channel.setName(`vEX Pilots: ${PilotServerCount}`)
+    const updatePilots = (guild, pilotcount) => {
+      const channelID = '764546853264949248';
+      const channel = guild.channels.cache.get(channelID);
+      channel.setName(`vEX Pilots: ${pilotcount}`);
     }
 
-    client.on('guildMemberUpdate', (member) => updatePilots(member.guild));
-
-    updatePilots(guild);
+    setInterval(async () => {
+      let query = `SELECT * from gvausers WHERE activation = 1`;
+      mysqlConnection.query(query, async (err, res, fields) => {
+        if (err) throw err;
+        if (!res) console.error('No pilots found. At all.');
+        let pilotcount = res.length;
+        updatePilots(guild, pilotcount);
+      });
+    }, 60000);
 }
