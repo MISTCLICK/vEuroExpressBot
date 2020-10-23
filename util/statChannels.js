@@ -29,4 +29,19 @@ module.exports = (client) => {
         updatePilots(guild, pilotcount);
       });
     }, 60000);
+
+    const updateHours = (guild, houramount) => {
+      const channelID = '768175045000036432';
+      const channel = guild.channels.cache.get(channelID);
+      channel.setName(`Total hours: ${houramount}`);
+    }
+
+    setInterval(async () => {
+      let query = `SELECT ROUND(sum(flight_duration), 2) as gva_hours from vampireps`;
+      mysqlConnection.query(query, async (err, res, fields) => {
+        if (err) throw err;
+        if (!res) console.error('No hours found. At all.');
+        updateHours(guild, res[0].gva_hours);
+      });
+    }, 30000);
 }
