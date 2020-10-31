@@ -23,14 +23,14 @@ module.exports = class MetarCommand extends Commando.Command {
     }
 
     async run(message, airport) {
-            let getMetar = async () => {
-                let airportString = airport.airport;
-                let airportCode = airportString.toUpperCase();
-                let metarURL = 'https://metartaf.ru/'+airportCode+'.json';
-                let response = await axios.get(metarURL);
-                let metar = response.data;
-                return metar;
-            }
+        let getMetar = async () => {
+            let airportString = airport.airport;
+            let airportCode = airportString.toUpperCase();
+            let metarURL = `https://metartaf.ru/${airportCode}.json`;
+            let response = await axios.get(metarURL);
+            let metar = response.data;
+            return metar;
+        }
         let metarValue = await getMetar()
         .catch(console.error);
         if (metarValue) {
