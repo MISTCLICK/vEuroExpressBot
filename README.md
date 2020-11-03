@@ -1,29 +1,6 @@
 # vEuroExpressBot
 A discord bot for handling operations and user synchronization in EuroExpress Virtual Airline Community Discord Server.
-If you would like to run this bot on your server please read the LICENSE carefully and then follow the manual below.
+If you would like to use this bot on your server please read the LICENSE carefully and only then use the code.
 
-First of all, Node.js, Discord.js, Discord.js/commando, git and Axios are required to operate.
-This means that your system needs 2 things: a code editor and Node.js of the either LTS or NEWEST version (only v12+).
-You can find Node.js here: https://nodejs.org/en/
-UPD: v1.1 - you now also require a MongoDB server.
-
-After you have extracted files to any location and installed Node.js open any form of a console/terminal and point it to the folder with the bot with the `cd` command.
-Then type `npm i` to install all the packages that the bot needs (discord.js, discord.js/Commando, git, mongoose and axios).
-
-Then it is your job to edit the code for it to suit your server (mostly texts and images). There are too many files to be edited, so we can't quite tell you which exact ones you need. Editing of the files - that is what you need the text editor for.
-
-When you're done, create a discord application in the developer portal and invite the bot to your server using the `Oauth2 link generator` with ADMINISTRATOR permissions. Once that is done, create a file with a name `config.json` in the bot's root folder with the following code:
-
-```json
-{
-    "prefix": "YOUR PREFIX HERE",
-    "token": "YOUR BOT TOKEN HERE",
-    "mongoPath": "YOUR MONGO PATH HERE"
-}
-```
-
-To run the bot, simply type `node index.js` in the terminal/console pointed at the bot folder with `cd` command.
-
-Now, you're done! Don't forget to follow the license properly and enjoy using the bot.
-
--- Artur Vasiljev EXP008
+Unfortunately we can't provide any sort of "Detailed manual" due to some aspects of the bot being highly specific to EuroExpress VA. Thanks for your understanding.
+If you still would like to use our code, but need help, just join our discord server: https://discord.gg/BxmjpP5 and DM Artur Vasiljev EXP008 (me). You can also support us by joining our VA - http://veuroexpress.org.
