@@ -1,18 +1,33 @@
 const mysqlConnection = require('../mysql/sqlconnect.js');
+const mongo = require('../mongo/mongo.js');
+const statScript = require('./statScript.js');
 
 module.exports = (client) => {
     const guild = client.guilds.cache.get('731107533024133121')
 
-    const updateMembers = (guild) => {
-      const channelId = '764146717104668722'
-      const channel = guild.channels.cache.get(channelId)
-      channel.setName(`Members: ${guild.memberCount.toLocaleString()}`)
+    const updateMembers = async (guild) => {
+      await mongo().then(async mongoose => {
+        try {
+          const guildID = guild.id;
+          const chInfo = await statScript.findOne({
+            guildID
+          });
+          if (chInfo == null || chInfo.channelID == null) return;
+          const channelId = chInfo.channelID;
+          const channel = guild.channels.cache.get(channelId);
+          channel.setName(`Members: ${guild.memberCount.toLocaleString()}`);
+        } finally {
+          mongoose.connection.close();
+        }
+      });
     }
   
-    client.on('guildMemberAdd', (member) => updateMembers(member.guild))
-    client.on('guildMemberRemove', (member) => updateMembers(member.guild))
-  
-    updateMembers(guild)
+    client.on('guildMemberAdd', (member) => updateMembers(member.guild));
+    client.on('guildMemberRemove', (member) => updateMembers(member.guild));
+
+    for (let guildCache in client.guilds.cache) {
+      updateMembers(guildCache);
+    }
 
     const updatePilots = (guild, pilotcount) => {
       const channelID = '764546853264949248';

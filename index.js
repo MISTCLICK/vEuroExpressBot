@@ -47,7 +47,7 @@ client.registry
     .registerCommandsIn(path.join(__dirname, 'cmds'))
 
 client.on('message', async function(message) {
-    if (message.content.startsWith('<@') && message.content.endsWith('>')) {
+    if (message.content.startsWith('<@') && message.content.endsWith('>') && !message.content.startsWith('<@&')) {
         const UserMention = message.mentions.users.first();
         if (UserMention.id === '748608375318905013') {
         const MenjaZvali = new Discord.MessageAttachment('./images/yes.jpg');

@@ -7,7 +7,7 @@ let app = express();
 app.use(bodyParser.json());
     
 let mysqlConnection = mysql.createConnection({
-    host: "92.63.97.211",
+    host: "localhost",
     user: SQLuser,
     password: SQLpassword,
     database: "vam_db",
