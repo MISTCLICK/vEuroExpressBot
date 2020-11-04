@@ -16,7 +16,8 @@ module.exports = client => {
                 channel.send(`**${member}** ${welcomeInfo.welcomeMessage}`);
 
                 if (welcomeInfo.entryRole !== null) {
-                    member.roles.add(welcomeInfo.entryRole);
+                    let role = welcomeInfo.entryRole.slice(3, -1);
+                    member.roles.add(role);
                 }
             } finally {
                 mongoose.connection.close();

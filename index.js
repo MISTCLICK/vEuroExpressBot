@@ -17,7 +17,7 @@ const client = new Commando.CommandoClient({
 
 client.on('ready', async () => {
     console.log(`${client.user.username} is ready to perform his duties!`);
-    client.user.setActivity(`v1.1 | ${config.prefix}help`, type = 'PLAYING');
+    client.user.setActivity(`v1.2 | ${config.prefix}help`, type = 'PLAYING');
 
     roleClaim(client);
     SUPmessageChannel(client);
@@ -41,17 +41,17 @@ client.registry
         ['admin', 'Commands for moderation and administration purposes.']
     ])
     .registerDefaultGroups()
-	.registerDefaultCommands({
+    .registerDefaultCommands({
         unknownCommand: false,
     })
     .registerCommandsIn(path.join(__dirname, 'cmds'))
 
-client.on('message', async function(message) {
+client.on('message', async function (message) {
     if (message.content.startsWith('<@') && message.content.endsWith('>') && !message.content.startsWith('<@&')) {
         const UserMention = message.mentions.users.first();
         if (UserMention.id === '748608375318905013') {
-        const MenjaZvali = new Discord.MessageAttachment('./images/yes.jpg');
-        message.channel.send(MenjaZvali);
+            const MenjaZvali = new Discord.MessageAttachment('./images/yes.jpg');
+            message.channel.send(MenjaZvali);
         }
     }
 });
