@@ -10,6 +10,7 @@ module.exports = class ClearCommand extends Commando.Command {
             memberName: 'clear-warnings',
             description: "A command to clear user's warings",
             aliases: ['cw', 'warns-clear'],
+            guildOnly: true
         });
     }
 

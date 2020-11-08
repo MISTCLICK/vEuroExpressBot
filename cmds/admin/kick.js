@@ -8,7 +8,8 @@ module.exports = class KickCommand extends Commando.Command {
             memberName: 'kick',
             description: 'A command to kick someone.',
             clientPermissions: ['ADMINISTRATOR'],
-            userPermissions: ['KICK_MEMBERS']
+            userPermissions: ['KICK_MEMBERS'],
+            guildOnly: true
         });
     }
 

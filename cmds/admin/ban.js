@@ -8,7 +8,8 @@ module.exports = class BanCommand extends Commando.Command {
             memberName: 'ban',
             description: 'A command to ban someone.',
             clientPermissions: ['ADMINISTRATOR'],
-            userPermissions: ['BAN_MEMBERS']
+            userPermissions: ['BAN_MEMBERS'],
+            guildOnly: true
         });
     }
 

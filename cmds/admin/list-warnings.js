@@ -11,6 +11,7 @@ module.exports = class ListWarningsCommand extends Commando.Command {
             memberName: 'list-warnings',
             description: "A command to list user's warings",
             aliases: ['lw', 'warns', 'warnings', 'listw', 'warns-list', 'warnsl'],
+            guildOnly: true
         });
     }
 
