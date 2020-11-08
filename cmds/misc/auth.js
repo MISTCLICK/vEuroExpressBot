@@ -63,7 +63,13 @@ module.exports = class AuthCommand extends Commando.Command {
                             } else {
                                 message.member.roles.add(pilotRole)
                             }
+<<<<<<< Updated upstream
                         } else if (pilotAuth.auth === true) return message.reply("This pilot is already auntificated! Don't try to fool the system!");
+=======
+                        } else if (pilotAuth.auth === true) {
+                            return message.reply("This pilot is already auntificated! Don't try to fool the system!");
+                        } 
+>>>>>>> Stashed changes
                     } finally {
                         mongoose.connection.close();
                     }
