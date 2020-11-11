@@ -8,7 +8,8 @@ module.exports = client => {
     const getEmoji = emojiName => client.emojis.cache.find(emoji => emoji.name === emojiName);
 
     const emojis = {
-        radar: 'ATC Kontrolar!'
+        radar: 'ATC Kontrolar!',
+        putinPing: 'Stream Notifications',
     }
 
     const reactions = []

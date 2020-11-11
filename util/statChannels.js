@@ -52,7 +52,7 @@ module.exports = (client) => {
   }
 
   setInterval(async () => {
-    let query = `SELECT ROUND(sum(flight_duration), 2) as gva_hours from vampireps`;
+    let query = `SELECT ROUND(sum(time), 2) as gva_hours from v_total_data_flight_no_rejected`;
     mysqlConnection.query(query, async (err, res, fields) => {
       if (err) throw err;
       if (!res) console.error('No hours found. At all.');
