@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const mongo = require('../mongo/mongo.js');
 const supportScript = require('./supportSetupScript.js');
-const rrScript = require('./rrSetupScript.js');
 const welcomeScript = require('./welcomeScript.js');
 const statScript = require('./statScript.js');
 
@@ -22,39 +21,50 @@ async function supportSetup(message, client) {
             message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: [ 'time' ] })
             .then(messages => {
               const categoryID = messages.first().content;
-              message.channel.send("Please tag the `@Support` role of the server!").then(() => {
-                message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: [ 'time' ] })
-                .then(async messages => {
-                  const supportRoleID = messages.first().content.slice(3, -1);
-                  
-                  let schEmbed = await supChannelObj.send(new Discord.MessageEmbed()
-                  .setColor('#00309d')
-                  .setAuthor('Support Ticket system', client.user.displayAvatarURL(), link)
-                  .setDescription('Press the reaction below to open a new ticket!')
-                  );
-              
-                  schEmbed.react('🎫');
-              
-                  const guildID = message.guild.id;
-              
-                  await mongo().then(async mongoose => {
-                    try {
-                      await supportScript.findOneAndUpdate({
-                        guildID,
-                        setupType: 0
+              message.guild.channels.create('support-log', { type: 'text'}).then(async channel => {
+                channel.setParent(categoryID);
+                channel.overwritePermissions([
+                  {
+                    id: message.guild.roles.everyone,
+                    deny: ["VIEW_CHANNEL", "SEND_MESSAGES"]
+                  }
+                ]);
+                const logChannelID = channel.id;
+                message.channel.send("A support-log channel has been created, if you wish, you can now manually setup permissions for it (not a bot function).\n\nPlease tag the `@Support` role of the server!").then(() => {
+                  message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: [ 'time' ] })
+                  .then(async messages => {
+                    const supportRoleID = messages.first().content.slice(3, -1);
+                    
+                    let schEmbed = await supChannelObj.send(new Discord.MessageEmbed()
+                    .setColor('#00309d')
+                    .setAuthor('Support Ticket system', client.user.displayAvatarURL(), link)
+                    .setDescription('Press the reaction below to open a new ticket!')
+                    );
+                
+                    schEmbed.react('🎫');
+                
+                    const guildID = message.guild.id;
+                
+                    await mongo().then(async mongoose => {
+                      try {
+                        await supportScript.findOneAndUpdate({
+                          guildID,
+                          setupType: 0
+                        }, {
+                          guildID,
+                          setupType: 0,
+                          channelID: supChannelID,
+                          categoryID: categoryID,
+                          supportRoleID: supportRoleID,
+                          logChannelID: logChannelID
                       }, {
-                        guildID,
-                        setupType: 0,
-                        channelID: supChannelID,
-                        categoryID: categoryID,
-                        supportRoleID: supportRoleID
-                    }, {
-                        upsert: true,
-                        useFindAndModify: false
+                          upsert: true,
+                          useFindAndModify: false
+                      });
+                      } finally {
+                        mongoose.connection.close();
+                      }
                     });
-                    } finally {
-                      mongoose.connection.close();
-                    }
                   });
                 });
               });
@@ -67,42 +77,6 @@ async function supportSetup(message, client) {
     message.reply('You did not send the required information in time.');
   });
 };
-
-async function rrChannelSet(message) {
-  message.reply('Please tag the reaction-role channel!').then(() => {
-    const filter = m => message.author.id === m.author.id;
-
-    message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: [ 'time' ] })
-    .then(async messages => {
-      const rrChannel = messages.first().content;
-      const rrChannelID = rrChannel.slice(2, -1);
-      const guildID = message.guild.id;
-      await mongo().then(async mongoose => {
-        try {
-          await rrScript.findOneAndUpdate({
-            guildID,
-            setupType: 1
-          }, {
-            guildID,
-            setupType: 1,
-            channelID: rrChannelID
-          }, {
-            upsert: true,
-            useFindAndModify: false
-          });
-        } finally {
-          mongoose.connection.close();
-        }
-      });
-    });
-  }).catch(() => {
-    message.reply('You did not send the required information in time.');
-  });
-};
-
-async function rrMessage() {
-  //
-}
 
 async function welcomeSetup(message, guildID) {
   message.reply("Please tag the channel that you'd like the welcome messages to appear in!").then(() => {
@@ -200,4 +174,4 @@ async function statsSetup(message, type = Number) {
   });
 }
 
-module.exports = { supportSetup, welcomeSetup, statsSetup/*rrChannelSet*/ };
+module.exports = { supportSetup, welcomeSetup, statsSetup };

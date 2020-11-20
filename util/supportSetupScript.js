@@ -21,6 +21,10 @@ const supportScript = mongoose.Schema({
     supportRoleID: {
         type: String,
         required: true
+    },
+    logChannelID: {
+        type: String,
+        required: true
     }
 });
 

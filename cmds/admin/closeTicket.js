@@ -1,8 +1,10 @@
 const Commando = require('discord.js-commando');
+const mongo = require('../../mongo/mongo.js');
 const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
 const { MessageAttachment } = require('discord.js');
+const supportSetupScript = require('../../util/supportSetupScript.js');
 
 module.exports = class closeTicket extends Commando.Command {
     constructor(client) {
@@ -29,17 +31,28 @@ module.exports = class closeTicket extends Commando.Command {
                 return m3time;
             }
             
-            for (const message of fetchedMessages.array().reverse()) await pushToArray(`${message.author.username} at ${handleTime(message.createdTimestamp)} => "${message.content}"`);
+            for (const message of fetchedMessages.array().reverse()) await pushToArray(`${message.author.username} at ${handleTime(message.createdTimestamp)} => [ ${message.content} ]`);
 
             for (let i = 0; i < finalArr.length; i++) {
                 fs.appendFileSync(path.join(__dirname.slice(0, -11), `log/support/${message.channel.name}.txt`), `${finalArr[i]}\n`, async err => {
                     if (err) throw err;
                 });
             }
-        }).then(async ()=> {
-            const logChannel = this.client.channels.cache.get('764524163310157834');
-            logChannel.send(`${message.author} has closed a ticket.\n${message.channel.name}`, await new MessageAttachment(path.join(__dirname.slice(0, -11), `log/support/${message.channel.name}.txt`)));
-            message.channel.delete();
+        }).then(async () => {
+            await mongo().then(async mongoose => {
+                try {
+                    const guildID = message.guild.id;
+                    const supCh = await supportSetupScript.findOne({
+                        guildID,
+                        setupType: 0
+                    });
+                    const logChannel = this.client.channels.cache.get(supCh.logChannelID);
+                    logChannel.send(`${message.author} has closed a ticket.\n${message.channel.name}`, await new MessageAttachment(path.join(__dirname.slice(0, -11), `log/support/${message.channel.name}.txt`)));
+                    message.channel.delete();
+                } finally {
+                    mongoose.connection.close();
+                }
+            });
         });
     }
 }
