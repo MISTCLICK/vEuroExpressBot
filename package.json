@@ -1,6 +1,6 @@
 {
   "name": "veuroexpress",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A bot custom-developed for EuroExpress VA",
   "main": "index.js",
   "scripts": {

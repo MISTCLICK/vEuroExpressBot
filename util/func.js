@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const mongo = require('../mongo/mongo.js');
+const mongo = require('../mongo/mongo');
 const supportScript = require('./supportSetupScript.js');
 const welcomeScript = require('./welcomeScript.js');
 const statScript = require('./statScript.js');

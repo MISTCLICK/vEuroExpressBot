@@ -35,7 +35,7 @@ module.exports = client => {
 
                 const channel = client.channels.cache.get(welcomeInfo.leaveChannelID);
                 if (welcomeInfo.leaveMessage == null) return;
-                channel.send(`**${member}** ${welcomeInfo.leaveMessage}`);
+                channel.send(`**${member.nickname || member.user.username}** ${welcomeInfo.leaveMessage}`);
             } finally {
                 mongoose.connection.close();
             }

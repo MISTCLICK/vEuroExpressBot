@@ -8,6 +8,8 @@ const mongo = require('./mongo/mongo.js');
 const Discord = require('discord.js');
 const Commando = require('discord.js-commando');
 const path = require('path');
+const moment = require('moment');
+const fs = require('fs');
 
 const client = new Commando.CommandoClient({
     owner: ['349553169035952140', '331528449644560405'],
@@ -53,6 +55,21 @@ client.on('message', async function (message) {
             const MenjaZvali = new Discord.MessageAttachment('./images/yes.jpg');
             message.channel.send(MenjaZvali);
         }
+    }
+
+    if (message.channel.name.includes("ticket-")) {
+        let finalArr = [];
+
+        const handleTime = (timestamp) => {
+            let time = moment(timestamp).utc();
+            let m3time = time.format("DD/MM/YYYY - hh:mm:ss a").replace("pm", "PM").replace("am", "AM");
+            return m3time;
+        }
+
+        let msgTicketText = `${message.author.username} at ${handleTime(message.createdTimestamp)} => [ ${message.content} ]`
+        fs.appendFileSync(path.join(__dirname, `log/support/${message.channel.name}.txt`), `${msgTicketText}\n`, async err => {
+            if (err) throw err;
+        });
     }
 });
 

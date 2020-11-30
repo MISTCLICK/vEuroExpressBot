@@ -32,22 +32,25 @@ module.exports = async client => {
                         reaction.message.guild.channels.create(`ticket-${user.tag}-${Math.floor(Math.random() * 1100) +100}`, {
                             type: 'text'
                         }).then(async channel => {
-                            channel.setParent(categoryID);
-                            channel.overwritePermissions([
-                                {
-                                    id: user.id,
-                                    allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
-                                },
-                                {
-                                    id: reaction.message.guild.roles.everyone,
-                                    deny: ["VIEW_CHANNEL"]
-                                },
-                                {
-                                    id: supRoleID,
-                                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES"]
-                                }
-                            ],);
-                            channel.send(`<@${user.id}>`, new Discord.MessageEmbed().setTitle("Welcome to your ticket!").setDescription("Describe your issue and we will get back to you shortly!").setColor("00ff00"));
+                            const trueChannel = channel;
+                            trueChannel.setParent(categoryID).then(() => {
+                                trueChannel.overwritePermissions([
+                                    {
+                                        id: user.id,
+                                        allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+                                    },
+                                    {
+                                        id: reaction.message.guild.roles.everyone,
+                                        deny: ["VIEW_CHANNEL"]
+                                    },
+                                    {
+                                        id: supRoleID,
+                                        allow: ["VIEW_CHANNEL", "SEND_MESSAGES"]
+                                    }
+                                ],).then(() => {
+                                    trueChannel.send(`<@${user.id}>`, new Discord.MessageEmbed().setTitle("Welcome to your ticket!").setDescription("Describe your issue and we will get back to you shortly!").setColor("00ff00"));
+                                });
+                            });
                         });
                     }
                 }
