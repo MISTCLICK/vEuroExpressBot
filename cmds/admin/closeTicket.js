@@ -1,7 +1,5 @@
 const Commando = require('discord.js-commando');
 const mongo = require('../../mongo/mongo.js');
-const moment = require('moment');
-const fs = require('fs');
 const path = require('path');
 const { MessageAttachment } = require('discord.js');
 const supportSetupScript = require('../../util/supportSetupScript.js');
@@ -14,7 +12,6 @@ module.exports = class closeTicket extends Commando.Command {
             memberName: 'close',
             description: 'A command to close a ticket',
             clientPermissions: ['ADMINISTRATOR'],
-            userPermissions: ['CHANGE_NICKNAME', 'MANAGE_CHANNELS', 'MANAGE_MESSAGES'],
             guildOnly: true
         });
     }
@@ -28,6 +25,7 @@ module.exports = class closeTicket extends Commando.Command {
                     guildID,
                     setupType: 0
                 });
+                if (!message.member.roles.cache.has(supCh.supportRoleID)) return message.reply("Hey there! Unfortunately I can't let you use this command. To use this command you need to be a member of the support team of this server, you can always ask the admins to join though!");
                 const logChannel = this.client.channels.cache.get(supCh.logChannelID);
                 logChannel.send(`${message.author} has closed a ticket.\n${message.channel.name}`, await new MessageAttachment(path.join(__dirname.slice(0, -11), `log/support/${message.channel.name}.txt`)));
                 message.channel.delete();

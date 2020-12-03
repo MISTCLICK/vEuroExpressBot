@@ -15,7 +15,7 @@ const client = new Commando.CommandoClient({
     owner: ['349553169035952140', '331528449644560405'],
     commandPrefix: config.prefix,
     invite: 'https://discord.gg/BxmjpP5'
-})
+});
 
 client.on('ready', async () => {
     console.log(`${client.user.username} is ready to perform his duties!`);
@@ -57,9 +57,7 @@ client.on('message', async function (message) {
         }
     }
 
-    if (message.channel.name.includes("ticket-")) {
-        let finalArr = [];
-
+    if (message.channel.name.startsWith("ticket-")) {
         const handleTime = (timestamp) => {
             let time = moment(timestamp).utc();
             let m3time = time.format("DD/MM/YYYY - hh:mm:ss a").replace("pm", "PM").replace("am", "AM");

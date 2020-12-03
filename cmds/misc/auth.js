@@ -32,7 +32,7 @@ module.exports = class AuthCommand extends Commando.Command {
             if (err) throw err;
             if (!res) return message.reply('No such pilot found in our Data Base.');
             for (const userInfo of res) {
-                const pilotInfo = `${userInfo.name} ${userInfo.surname} ${userInfo.callsign}`
+                const pilotInfo = `${userInfo.name} ${userInfo.surname} ${userInfo.callsign}`;
                 await mongo().then(async mongoose => {
                     try {
                         const pilotAuth = await authScript.findOne({
