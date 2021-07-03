@@ -1,42 +1,40 @@
-const Commando = require('discord.js-commando');
-const axios = require('axios');
-
-module.exports = class MetarCommand extends Commando.Command {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = __importDefault(require("axios"));
+const discord_js_commando_1 = require("discord.js-commando");
+class MetarCommand extends discord_js_commando_1.Command {
     constructor(client) {
         super(client, {
             name: 'metar',
-            group: 'aviation',
+            description: 'Gives out airport\'s METAR.',
             memberName: 'metar',
-            description: 'Provides the METAR of the airport requested.',
-            args: [
-                {
+            group: 'aviation',
+            aliases: ['m'],
+            args: [{
                     key: 'airport',
-                    prompt: "What airport's metar would you like to get? Please provide the code only, don't type out the command again!",
                     type: 'string',
-                    validate: text => text.length === 4
-                }
-            ],
-            argsCount: 1,
-            examples: ['!metar EVRA', '!m ULLI'],
-            aliases: ['m']
+                    default: '',
+                    prompt: 'Please provide a 4 letter long ICAO code.'
+                }]
         });
     }
-
-    async run(message, airport) {
-        let getMetar = async () => {
-            let airportString = airport.airport;
-            let airportCode = airportString.toUpperCase();
-            let metarURL = `https://metartaf.ru/${airportCode}.json`;
-            let response = await axios.get(metarURL);
-            let metar = response.data;
-            return metar;
+    async run(message, { airport }) {
+        try {
+            if (airport.length !== 4)
+                return message.reply('Please provide a 4 letter long ICAO code.');
+            let metar = await axios_1.default.get(`http://metartaf.ru/${airport.toUpperCase()}.json`);
+            if (metar.data.metar.slice(20).startsWith(airport.toUpperCase())) {
+                let newMetar = metar.data.metar.slice(19);
+                return message.reply('```' + newMetar + '```');
+            }
+            return message.reply('```' + metar.data.metar + '```');
         }
-        let metarValue = await getMetar()
-        .catch(console.error);
-        if (metarValue) {
-            console.log(`Metar of ${airport.airport} has been requested!`);
-            console.log(metarValue);
-            message.reply("```" + `\n${metarValue.metar.slice(19)}` + "\n```");
-        } else return message.channel.send('No airport with such ICAO code was found in our Data Base, please provide a valid ICAO code next time!');
+        catch (err) {
+            return message.reply('Such airport was not found!');
+        }
     }
 }
+exports.default = MetarCommand;

@@ -6,4 +6,4 @@ One rule is - do not try to contribute anything harmful or something that you ha
 If you're sure that your contribution will work perfectly fine - start a pull request or leave a suggestion in comments to the file you want to edit.
 
 :)
--- Artur Vasiljev EXP008
+-- Arturs Vasiļjevs EXP002

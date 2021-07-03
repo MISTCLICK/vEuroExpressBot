@@ -1,74 +1,33 @@
-const config = require('./config.json');
-const roleClaim = require('./util/role-claim.js');
-const SUPmessageChannel = require('./util/support-channel-create.js');
-const MemberStatus = require('./util/memberJL.js');
-const membercountStat = require('./util/statChannels.js');
-const automod = require('./util/automod.js');
-const mongo = require('./mongo/mongo.js');
-const Discord = require('discord.js');
-const Commando = require('discord.js-commando');
-const path = require('path');
-const moment = require('moment');
-const fs = require('fs');
-
-const client = new Commando.CommandoClient({
-    owner: ['349553169035952140', '331528449644560405'],
-    commandPrefix: config.prefix,
-    invite: 'https://discord.gg/BxmjpP5'
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
 });
-
-client.on('ready', async () => {
-    console.log(`${client.user.username} is ready to perform his duties!`);
-    client.user.setActivity(`v1.2 | ${config.prefix}help`, type = 'PLAYING');
-
-    roleClaim(client);
-    SUPmessageChannel(client);
-    MemberStatus(client);
-    membercountStat(client);
-    automod(client);
-    await mongo().then(mongoose => {
-        try {
-            console.log("Connected to MongoDB");
-        } finally {
-            mongoose.connection.close();
-        }
-    });
-});
-
-client.registry
-    .registerDefaultTypes()
-    .registerGroups([
-        ['aviation', 'Commands connected to aviation, like METAR or TAF.'],
-        ['misc', 'Miscellaneous commands.'],
-        ['admin', 'Commands for moderation and administration purposes.']
-    ])
-    .registerDefaultGroups()
-    .registerDefaultCommands({
-        unknownCommand: false,
-    })
-    .registerCommandsIn(path.join(__dirname, 'cmds'))
-
-client.on('message', async function (message) {
-    if (message.content.startsWith('<@') && message.content.endsWith('>') && !message.content.startsWith('<@&')) {
-        const UserMention = message.mentions.users.first();
-        if (UserMention.id === '748608375318905013') {
-            const MenjaZvali = new Discord.MessageAttachment('./images/yes.jpg');
-            message.channel.send(MenjaZvali);
-        }
-    }
-
-    if (message.channel.name.startsWith("ticket-")) {
-        const handleTime = (timestamp) => {
-            let time = moment(timestamp).utc();
-            let m3time = time.format("DD/MM/YYYY - hh:mm:ss a").replace("pm", "PM").replace("am", "AM");
-            return m3time;
-        }
-
-        let msgTicketText = `${message.author.username} at ${handleTime(message.createdTimestamp)} => [ ${message.content} ]`
-        fs.appendFileSync(path.join(__dirname, `log/support/${message.channel.name}.txt`), `${msgTicketText}\n`, async err => {
-            if (err) throw err;
-        });
-    }
-});
-
-client.login(config.token);
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = __importStar(require("./client"));
+const logger_1 = __importDefault(require("./util/logger"));
+const config_json_1 = require("./config.json");
+const package_json_1 = require("./package.json");
+logger_1.default.info(`vEuroExpress Bot v${package_json_1.version}`);
+client_1.setupClient();
+client_1.default.login(config_json_1.token);
+process.on('uncaughtException', (err) => logger_1.default.error(err));
+process.on('unhandledRejection', (err) => logger_1.default.error(err));

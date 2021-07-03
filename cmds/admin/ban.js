@@ -1,34 +1,31 @@
-const Commando = require('discord.js-commando');
-
-module.exports = class BanCommand extends Commando.Command {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_commando_1 = require("discord.js-commando");
+class BanCommand extends discord_js_commando_1.Command {
     constructor(client) {
         super(client, {
             name: 'ban',
             group: 'admin',
             memberName: 'ban',
-            description: 'A command to ban someone.',
-            clientPermissions: ['ADMINISTRATOR'],
+            description: 'Bans a user from the server.',
             userPermissions: ['BAN_MEMBERS'],
-            guildOnly: true
+            argsType: 'multiple'
         });
     }
-
     async run(message, args) {
-        if (!args[1]) return;
-        const mention = message.content.slice(5);
-        if (!mention.startsWith("<@")) return;
-        const memberTag = message.mentions.users.first();
-        const reasonDirty = message.content.slice(5);
-        const memberString = memberTag.toString();
-        const reason = reasonDirty.slice(memberString.length);
-        const member = message.guild.member(memberTag);
-        if (member) {
-            member.send(`You have been banned from **${message.guild}** by ${message.author}\nReason: ${reason}\nUnfortunately, this is a permanent ban. If you believe, your ban was unfair, please email mistclick.a@veuroexpress.org or constact MISTCLICK#8009 in Discord, describing your ban and explaining, why should you be unbanned.`).then(() => {
-                member.ban({reason: `${reason}`}).then(() => {
-                    message.reply(`${memberTag} has been banned.`);
-                });
-            });
-        }
-        console.log(`${memberTag.username} has been banned by ${message.author.username}.\nReason: ${reason}`);
+        const target = message.mentions.users.first();
+        if (!target)
+            return message.reply('User not found.');
+        args.shift();
+        const reason = args.join(' ');
+        if (reason == '')
+            return message.reply('Please provide a reason.');
+        const targetMember = message.guild.members.cache.get(target.id);
+        if (!targetMember)
+            return message.reply('User not found.');
+        await target.send(`You were banned from the **${message.guild.name}** server by **${message.author.username}** for: \`${reason}\``);
+        targetMember.ban({ reason: reason });
+        return message.reply(`${target.username} was successfully banned.`);
     }
 }
+exports.default = BanCommand;

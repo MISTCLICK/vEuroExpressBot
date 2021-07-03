@@ -1,34 +1,31 @@
-const Commando = require('discord.js-commando');
-
-module.exports = class KickCommand extends Commando.Command {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_commando_1 = require("discord.js-commando");
+class KickCommand extends discord_js_commando_1.Command {
     constructor(client) {
         super(client, {
             name: 'kick',
             group: 'admin',
             memberName: 'kick',
-            description: 'A command to kick someone.',
-            clientPermissions: ['ADMINISTRATOR'],
+            description: 'Kicks a user from the server.',
             userPermissions: ['KICK_MEMBERS'],
-            guildOnly: true
+            argsType: "multiple"
         });
     }
-
     async run(message, args) {
-        if (!args[1]) return;
-        const mention = message.content.slice(6);
-        if (!mention.startsWith("<@")) return;
-        const memberTag = message.mentions.users.first();
-        const reasonDirty = message.content.slice(6);
-        const memberString = memberTag.toString();
-        const reason = reasonDirty.slice(memberString.length);
-        const member = message.guild.member(memberTag);
-        if (member) {
-            member.send(`You have been kicked from **${message.guild}** by ${message.author}\nReason: ${reason}\nIf you wish to join back, you may do so in 24 hrs, but keep in mind that following the rules is obligatory and next time it will be a permaban!`).then(() => {
-                member.kick(reason).then(() => {
-                    message.reply(`${memberTag} has been kicked.`);
-                });
-            });
-        }
-        console.log(`${memberTag.username} has been kicked by ${message.author.username}.\nReason: ${reason}`);
+        const target = message.mentions.users.first();
+        if (!target)
+            return message.reply('Пользователь не найден.');
+        args.shift();
+        const reason = args.join(' ');
+        if (reason == '')
+            return message.reply('Пожалуйста предоставьте причину.');
+        const targetMember = message.guild.members.cache.get(target.id);
+        if (!targetMember)
+            return message.reply('Пользователь не найден');
+        await target.send(`Вы были кикнуты с сервера **${message.guild.name}** модератором **${message.author.username}** по причине: \`${reason}\``);
+        targetMember.kick(reason);
+        return message.reply(`${target.username} был успешно кикнут.`);
     }
 }
+exports.default = KickCommand;

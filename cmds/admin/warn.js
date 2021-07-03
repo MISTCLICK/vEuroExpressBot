@@ -1,58 +1,53 @@
-const Commando = require('discord.js-commando');
-const mongo = require('../../mongo/mongo.js');
-const warnScript = require('../../util/warn-script.js');
-
-module.exports = class WarnCommand extends Commando.Command {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_commando_1 = require("discord.js-commando");
+const warnScript_1 = __importDefault(require("../../schema/warnScript"));
+class WarnCommand extends discord_js_commando_1.Command {
     constructor(client) {
         super(client, {
             name: 'warn',
-            description: 'A command to warn a member',
-            memberName: 'warn',
             group: 'admin',
-            clientPermissions: ['ADMINISTRATOR'],
-            userPermissions: ['MANAGE_MESSAGES', 'MANAGE_NICKNAMES', 'KICK_MEMBERS', 'BAN_MEMBERS'],
+            memberName: 'warn',
+            description: 'Warns a user.',
+            clientPermissions: ["ADMINISTRATOR"],
+            userPermissions: ["MANAGE_MESSAGES"],
             argsType: "multiple",
             guildOnly: true
         });
     }
-
+    //@ts-ignore
     async run(message, args) {
-        const target = message.mentions.users.first();
-        if (!target) return;
+        const targetMember = message.mentions.users.first();
+        if (!targetMember)
+            return;
         args.shift();
-
-        const guildID = message.guild.id;
-        const userID = target.id;
         const reason = args.join(' ');
-        if (reason === '') return message.reply("You didn't specify a reason for the warning!");
-
-        const warning = {
-            author: message.member.user,
+        const guildID = message.guild.id;
+        const userID = targetMember.id;
+        if (reason == '')
+            return message.reply('Please provide a reason.');
+        const warn = {
+            author: message.author.id,
             timeStamp: new Date().getTime(),
             reason
-        }
-
-        await mongo().then(async mongoose => {
-            try {
-                await warnScript.findOneAndUpdate({
-                    guildID,
-                    userID
-                }, {
-                    guildID,
-                    userID,
-                    $push: {
-                        warnings: warning
-                    }
-                }, {
-                    upsert: true,
-                    useFindAndModify: false
-                });
-            } finally {
-                mongoose.connection.close();
+        };
+        await warnScript_1.default.findOneAndUpdate({
+            guildID,
+            userID
+        }, {
+            guildID,
+            userID,
+            $push: {
+                warns: warn
             }
+        }, {
+            upsert: true
         });
-
-        message.reply(`${target.tag} has been warned!\nReason: ${reason}`);
-        target.send(`You have been warned in **${message.guild}** by a moderator ${message.author}! Please follow the rules properly!\n\nReason: ${reason}`);
+        targetMember.send(`Hi! Moderator **${message.author.username}** warned you on the **${message.guild.name}** server for: \`${reason}\``);
+        return message.reply(`Warning for ${targetMember} issues successfully! Reason: ${reason}`);
     }
 }
+exports.default = WarnCommand;

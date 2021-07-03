@@ -1,9 +1,13 @@
-const Commando = require('discord.js-commando');
-const axios = require('axios');
-const { notamkey } = require('../../config.json');
-const { MessageEmbed } = require('discord.js');
-
-module.exports = class NOTAMcommand extends Commando.Command {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_commando_1 = __importDefault(require("discord.js-commando"));
+const axios_1 = __importDefault(require("axios"));
+const config_json_1 = require("../../config.json");
+const discord_js_1 = require("discord.js");
+class NOTAMcommand extends discord_js_commando_1.default.Command {
     constructor(client) {
         super(client, {
             name: 'notam',
@@ -15,36 +19,40 @@ module.exports = class NOTAMcommand extends Commando.Command {
                     key: 'airport',
                     prompt: "What airport's metar would you like to get?",
                     type: 'string',
-                    validate: text => text.length === 4
+                    validate: (text) => text.length === 4
                 }
             ],
             argsCount: 1,
             examples: ['!notam EVRA']
         });
     }
-
-    async run(message, airport) {
+    async run(message, args) {
         let getNOTAM = async () => {
-            let airportString = airport.airport;
+            let airportString = args.airport;
             let airportCode = airportString.toUpperCase();
-            let NOTAMURL = `https://applications.icao.int/dataservices/api/notams-realtime-list?api_key=${notamkey}&format=&criticality=&locations=${airportCode}`;
-            let notams = await axios.get(NOTAMURL);
+            let NOTAMURL = `https://applications.icao.int/dataservices/api/notams-realtime-list?api_key=${config_json_1.notamkey}&format=&criticality=&locations=${airportCode}`;
+            let notams = await axios_1.default.get(NOTAMURL);
             return notams;
-        }
-        let notamValue = await getNOTAM()
-        .catch(console.error);
+        };
+        let notamValue = await getNOTAM().catch(() => null);
+        //@ts-ignore
         for (const notam of notamValue.data) {
-            const notamember = new MessageEmbed()
-            .setColor('#00309d')
-            .setAuthor(`NOTAM for ${airport.airport.toUpperCase()}`, this.client.user.displayAvatarURL(), 'http://veuroexpress.org')
-            .setDescription(notam.all)
-            .setFooter('Found a bug? Report it in #support', this.client.user.displayAvatarURL())
-
+            const notamember = new discord_js_1.MessageEmbed()
+                .setColor(config_json_1.mainColor)
+                .setAuthor(`NOTAM for ${args.airport.toUpperCase()}`, this.client.user?.displayAvatarURL(), 'http://veuroexpress.org')
+                .setDescription(notam.all)
+                .setFooter(config_json_1.mainFooter, this.client.user?.displayAvatarURL());
             message.author.send(notamember);
         }
-
-        if (notamValue.data[0].all) {
-            message.reply('sent you a DM with information.');
+        //@ts-ignore
+        if (notamValue.data.length < 1) {
+            return message.reply('No data found.');
         }
+        //@ts-ignore
+        if (notamValue.data[0].all) {
+            return message.reply('sent you a DM with information.');
+        }
+        return null;
     }
 }
+exports.default = NOTAMcommand;
