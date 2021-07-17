@@ -14,15 +14,15 @@ class KickCommand extends Command {
 
   async run(message: CommandoMessage, args: String[]) {
     const target = message.mentions.users.first();
-    if (!target) return message.reply('Пользователь не найден.');
+    if (!target) return message.reply('User not found.');
     args.shift();
     const reason = args.join(' ');
-    if (reason == '') return message.reply('Пожалуйста предоставьте причину.');
+    if (reason == '') return message.reply('Please provide a reason.');
     const targetMember = message.guild.members.cache.get(target.id);
-    if (!targetMember) return message.reply('Пользователь не найден');
-    await target.send(`Вы были кикнуты с сервера **${message.guild.name}** модератором **${message.author.username}** по причине: \`${reason}\``);
+    if (!targetMember) return message.reply('User not found.');
+    await target.send(`You were kicked from the **${message.guild.name}** server by **${message.author.username}** for: \`${reason}\``);
     targetMember.kick(reason);
-    return message.reply(`${target.username} был успешно кикнут.`);
+    return message.reply(`${target.username} was successfully kicked.`);
   }
 }
 

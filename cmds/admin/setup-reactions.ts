@@ -47,9 +47,9 @@ export default class SetupCommand extends Commando.Command {
         if (channel) {
           const EmojiEmbed = new MessageEmbed()
           .setColor('#00309d')
-          .setAuthor('Reaction roles: Menu', 'https://cdn.discordapp.com/attachments/760151712845004840/760153034113417246/ava.png')
+          .setAuthor('Reaction roles: Menu', this.client.user?.displayAvatarURL())
           .setDescription('```\nReact to this message to get roles correspondant to the emoji\n```\n')
-          .setFooter('Found a bug? Report it in #support!', 'https://cdn.discordapp.com/attachments/760151712845004840/760153034113417246/ava.png')
+          .setFooter('Found a bug? Report it in #support!', this.client.user?.displayAvatarURL())
 
           channel.send(EmojiEmbed);
         } else {

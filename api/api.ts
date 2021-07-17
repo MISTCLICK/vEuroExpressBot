@@ -10,6 +10,7 @@ let OAuthHandler = Router();
 
 OAuthHandler.get('/', async (req, res) => {
   const code = req.query.code?.toString();
+  const user_id = req.query.user_id?.toString();
 
   if (!code) {
     return res.status(400).json({
@@ -20,11 +21,11 @@ OAuthHandler.get('/', async (req, res) => {
 
   try {
     const pendingUser = await usersModel.findOne({
-      discordID: 'pending'
+      user_id
     });
 
     if (!pendingUser) {
-      return res.send('SOMETHING WENT WRONG!');
+      return res.status(404).json({ success: false });
     }
 
     let accessTokenData = await axios.post('https://discord.com/api/oauth2/token', qs.stringify({
@@ -76,16 +77,18 @@ OAuthHandler.get('/', async (req, res) => {
           upsert: false
         });
 
-        return res.redirect('https://veuroexpress.org/profile');
+        return res.status(200).json({
+          success: true
+        });
       } else {
-        return res.send('SOMETHING WENT WRONG!');
+        return res.status(406).json({ success: false });
       }
     } else {
-      return res.send('SOMETHING WENT WRONG!');
+      return res.status(406).json({ success: false });
     }
   } catch (err) {
     logger.error(err);
-    return res.send('SOMETHING WENT WRONG!');
+    return res.status(500).json({ success: false });
   }
 });
 

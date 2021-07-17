@@ -34,7 +34,7 @@ export default class ListWarnsCommand extends Command {
 
     const embed = new MessageEmbed()
       .setColor(mainColor)
-      .setAuthor(`Предупреждения ${targetMember.tag}:`, this.client.user?.displayAvatarURL())
+      .setAuthor(`${targetMember.tag} warnings:`, this.client.user?.displayAvatarURL())
       .setDescription(reasons)
       .setFooter(mainFooter)
 

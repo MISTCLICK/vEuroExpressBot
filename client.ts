@@ -64,8 +64,7 @@ export function setupClient() {
   client.on('unknownCommand', m => console.log(`${m.author.username} tried to use an unknown command: "${m.content}"`));
 
   client.on('message', async (message) => {
-    //@ts-ignore
-    if (message.channel.name.startsWith("ticket-")) {
+    if (message.channel.type !== 'dm' && message.channel.name.startsWith("ticket-")) {
       const handleTime = (timestamp: number) => {
         let time = moment(timestamp).utc();
         let m3time = time.format("DD/MM/YYYY - HH:mm:ss");

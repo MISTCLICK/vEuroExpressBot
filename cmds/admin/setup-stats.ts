@@ -17,7 +17,7 @@ export default class SetupCommand extends Commando.Command {
   }
 
   async run(message: Commando.CommandoMessage) {
-    let stats = (await axios.get(`${baseURL}/api/stats`)).data.stats;
+    let stats = (await axios.get(`${baseURL}/stats`)).data.stats;
 
     const { guild } = message;
     guild.channels.create(`Total pilots: ${stats.totalPilots}`, {

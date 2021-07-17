@@ -5,7 +5,7 @@ import { baseURL } from '../config.json';
 
 export default async function updateStats(client: CommandoClient) {
   const allStatConfigs = await statChannelScript.find();
-  let stats = (await axios.get(`${baseURL}/api/stats`)).data.stats;
+  let stats = (await axios.get(`${baseURL}/stats`)).data.stats;
   
   for (const statCfg of allStatConfigs) {
     const guild = client.guilds.cache.get(statCfg.guildID);
